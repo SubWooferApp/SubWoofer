@@ -25,7 +25,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         console.log(streams[0]);
         // Make the directory
         var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
-
+ 
         return exec(mkdir);
 
     }).then(function(streams) {
@@ -41,16 +41,15 @@ exports.downloadYouTubeVideo = function(req, res) {
         // Chunk that video!
         return chunkVideo(yt_id);
 
-
     }).then(function(streams) {
         console.log(streams[0]);
 
         // Get that image!
         return makeThumb(yt_id);
 
+    }).then(function(streams) {
         // I'm getting rich
         res.status(200).send();
-
 
     }).catch(function(err) {
         console.log(err);
