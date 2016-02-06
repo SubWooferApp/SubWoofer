@@ -1,0 +1,19 @@
+{
+  "name": "subwoofer",
+  "version": "1.0.0",
+  "description": "Yes, we have no sombreros today.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SubwooferApp/Subwoofer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SubwooferApp/Subwoofer/issues"
+  },
+  "homepage": "https://github.com/SubwooferApp/Subwoofer#readme"
+}
