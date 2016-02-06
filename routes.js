@@ -37,7 +37,7 @@ function generateVideoLyrics(body, yt_id) {
     var defer = q.defer();
     var files = fs.readdirSync('videos/' + yt_id);
     console.log('Files:', files);
-    files = _.filter(files, file => { file.endsWith(".mp4"); });
+    files = _.filter(files, file => { return file.endsWith(".mp4"); });
     console.log('Files:', files);
     var chunks = files.length - 1;
     var curChunk = 0;
