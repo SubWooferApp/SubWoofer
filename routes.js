@@ -4,11 +4,9 @@ var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
 var fs = require('fs');
 var _ = require('lodash');
-<<<<<<< HEAD
 var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
-=======
 var db = require('db');
 var mongoose = require('mongoose');
 var chalk = require('chalk');
@@ -20,7 +18,6 @@ var db_connection = mongoose.connect('mongodb://localhost/subwoofer',
             console.log(chalk.red(err));
         }
 });
->>>>>>> c7487ff2989135cbe02a5419ec87d07435c905ca
 
 function chunkVideo(name) {
     var command =
