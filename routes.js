@@ -18,7 +18,7 @@ var db_connection = mongoose.connect('mongodb://localhost/subwoofer',
 
 function chunkVideo(name) {
     var command =
-            `ffmpeg -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
+            `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
@@ -57,8 +57,8 @@ function generateVideoLyrics(body, yt_id) {
     console.log('Files:', files);
     files = _.filter(files, file => { return file.endsWith(".jpg"); });
     console.log('Files:', files);
-    var chunks = files.length - 1;
-    var curChunk = 0;
+    var chunks = files.length;
+    var curChunk = 1;
 
     function readNext() {
         processSingleChunk(yt_id, curChunk, body)
@@ -91,6 +91,8 @@ function processSingleChunk(yt_id, chunk, body) {
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
         console.log(res);
         defer.resolve(res);
+    }).catch(function(err) {
+        defer.reject(err);
     });
 
     return defer.promise;
