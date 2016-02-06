@@ -7,7 +7,7 @@ var _ = require('lodash');
 var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
-var db = require('db');
+var db = require('./db');
 var mongoose = require('mongoose');
 var chalk = require('chalk');
 
