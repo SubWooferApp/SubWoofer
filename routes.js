@@ -122,3 +122,9 @@ exports.downloadYouTubeVideo = function(req, res) {
 
     });
 };
+
+exports.home = function(req, res) {
+    res.render('index', {
+        testing: 'metro boomin'
+    });
+};
