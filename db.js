@@ -3,11 +3,11 @@ var mongoose = require('mongoose'),
 var Song = mongoose.model('Song');
 
 /**
- * Empty strings are not passed to Mongo. Also it works fine if either of 
+ * Empty strings are not passed to Mongo. Also it works fine if any of 
  * these is undefined.
  * @return {promise} The promise representing the query
  */
-exports.find = function(youtube_id, title) {
+exports.find = function(youtube_id, title, artist) {
   var deferred = Q.defer();
   var query = {};
   if (youtube_id !== undefined && youtube_id !== '') {
@@ -15,6 +15,9 @@ exports.find = function(youtube_id, title) {
   }
   if (title !== undefined && title !== '') {
     query.title = title;
+  }
+  if (artist !== undefined && artist !== '') {
+    query.artist = artist;
   }
   Song.find(query).find(handle_response);
   return deferred.promise;
@@ -30,11 +33,12 @@ exports.find = function(youtube_id, title) {
 
 // youtube_id is required
 // lyrics should be an array of objects of the form { words: ['a', 'b'] }
-exports.insert_song = function(youtube_id, title, lyrics) {
+exports.insert_song = function(youtube_id, title, artist, lyrics) {
   var deferred = Q.defer();
   var s = new Song({
     youtube_id: youtube_id,
-    title: title, 
+    title: title,
+    artist: artist,
     lyrics: lyrics
   });
   s.save(handle_response);

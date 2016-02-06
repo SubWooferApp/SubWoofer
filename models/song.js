@@ -12,6 +12,7 @@ var Song = new Schema({
     required: true
   },
   title: String,
+  artist: String,
   lyrics: [[String]]
 });
 

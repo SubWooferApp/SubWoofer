@@ -1,6 +1,7 @@
 var q = require('q');
 var exec = q.nfbind(require('child_process').exec);
 var tagVideo = require('./clarifai_tools');
+var request = require('request');
 
 function chunkVideo(name) {
     var command =
@@ -13,15 +14,24 @@ function chunkVideo(name) {
     });
 };
 
-function makeThumb(name) {
-    var command =
-        `ffmpeg -ss 0.5 -i videos/${name}/${name}.mp4 -t 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
-    console.log(command);
-    return exec(command).then(function(streams) {
-        console.log('ffmpeg_out:', streams[0]);
-    }).catch(function(err) {
-        console.log(err);
+// function makeThumb(name) {
+//     var command =
+//         `ffmpeg -y -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
+//     console.log(command);
+//     return exec(command);
+// }
+
+function getVideoMetaData(id) {
+    var defer = q.defer();
+    var url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet&key=${process.env.YOUTUBE_API_KEY}`;
+    request(url, function(err, response, body) {
+        if (err)
+            defer.reject(err);
+        else
+            defer.resolve(body);
     });
+
+    return defer.promise;
 }
 
 exports.downloadYouTubeVideo = function(req, res) {
@@ -54,12 +64,9 @@ exports.downloadYouTubeVideo = function(req, res) {
     }).then(function(streams) {
         console.log(streams[0]);
 
-        // Get that image!
-        return makeThumb(yt_id);
-
-
-    }).then(function(streams){
-        console.log(streams[0]);
+        return getVideoMetaData(yt_id);
+        
+    }).then(function(body) {
 
         return tagVideo('1GWMvCXdsG4', 0);
 
