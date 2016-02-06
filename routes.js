@@ -18,7 +18,7 @@ function makeThumb(name) {
 
 function getVideoMetaData(id) {
     var defer = q.defer();
-    var url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.YOUTUBE_API_KEY}`;
+    var url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet&key=${process.env.YOUTUBE_API_KEY}`;
     request(url, function(err, response, body) {
         if (err)
             defer.reject(err);
@@ -39,7 +39,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         console.log(streams[0]);
         // Make the directory
         var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
- 
+
         return exec(mkdir);
 
     }).then(function(streams) {
