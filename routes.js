@@ -60,11 +60,14 @@ exports.downloadYouTubeVideo = function(req, res) {
     }).then(function(streams) {
         console.log(streams[0]);
 
-        return q.all(getVideoMetaData(yt_id), clarafai_tools.tagVideo('1GWMvCXdsG4', 0));
+        return q.all([
+            getVideoMetaData(yt_id),
+            clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
+        ]);
 
-    }).then(function(res) {
-        console.log(res[0]);
-        console.log(res[1]);
+    }).then(function(results) {
+        console.log(results[0]);
+        console.log(results[1]);
 
         // I'm getting rich
         res.status(200).send();
