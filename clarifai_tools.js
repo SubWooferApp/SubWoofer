@@ -1,9 +1,7 @@
 var Clarifai = require('./lib/clarifai_node.js');
 var q = require('q');
 
-Clarifai.initAPI('BJCpT_mnhysKgy2n0cI6mhNZNqggpJpJmsqbwvBz', 'spcZJuQduHYjDN9BjyFTT2-I6TMSzKuFneW45xHT');
-
-// Clarifai.setLogHttp(true);
+Clarifai.initAPI(process.env.CLARIFAI_CLIENT_ID, process.env.CLARIFAI_CLIENT_SECRET);
 
 Clarifai.setThrottleHandler(function(bThrottled, waitSeconds) {
     console.log(bThrottled ? ["throttled. service available again in", waitSeconds, "seconds"].join(' ') : "not throttled");
