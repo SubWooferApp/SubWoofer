@@ -92,7 +92,7 @@ function processSingleChunk(yt_id, chunk, body) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
-        var tags = res.results[0].result.classes.join(' ');
+        var tags = res.results[0].result.tag.classes.join(' ');
         wordpos.getPOS(tags, function(res) {
             console.log(res);
             defer.resolve(res);
