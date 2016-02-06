@@ -70,8 +70,8 @@ function processSingleChunk(yt_id, chunk, body) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
-        console.log(res.results[0].result.classes[0]);
-        defer.resolve(res.results[0].result.classes[0]);
+        console.log(res.results[0].result.tag.classes[0]);
+        defer.resolve(res.results[0].result.tag.classes[0]);
     });
 
     return defer.promise;
