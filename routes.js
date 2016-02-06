@@ -48,6 +48,8 @@ exports.downloadYouTubeVideo = function(req, res) {
         return makeThumb(yt_id);
 
     }).then(function(streams) {
+        console.log(streams[0]);
+
         // I'm getting rich
         res.status(200).send();
 
