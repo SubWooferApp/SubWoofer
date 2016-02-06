@@ -40,7 +40,10 @@ function generateVideoLyrics(body, yt_id) {
     var chunks = files.length - 1;
     var curChunk = 0;
 
+    console.log("hello");
+
     function readNext() {
+        console.log("GOGO");
         processSingleChunk(yt_id, curChunk, body)
             .then(successHandler)
             .catch(failureHandler);
@@ -68,7 +71,7 @@ function processSingleChunk(yt_id, chunk, body) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
-        console.log(res.results.result);
+        console.log(res);
         defer.resolve(res);
     });
 
@@ -102,13 +105,13 @@ exports.downloadYouTubeVideo = function(req, res) {
         // Chunk that video!
         return chunkVideo(yt_id);
 
-
     }).then(function(streams) {
         console.log(streams[0]);
 
         return getVideoMetaData(yt_id);
 
     }).then(function(body) {
+        console("GENERATE SOME LYRICS");
         generateVideoLyrics(body, yt_id);
 
         // I'm getting rich
