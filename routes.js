@@ -80,6 +80,8 @@ function processSingleChunk(yt_id, chunk, body) {
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
         console.log(res);
         defer.resolve(res);
+    }).catch(function(err) {
+        defer.reject(err);
     });
 
     return defer.promise;
