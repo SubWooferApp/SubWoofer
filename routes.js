@@ -4,9 +4,23 @@ var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
 var fs = require('fs');
 var _ = require('lodash');
+<<<<<<< HEAD
 var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
+=======
+var db = require('db');
+var mongoose = require('mongoose');
+var chalk = require('chalk');
+
+var db_connection = mongoose.connect('mongodb://localhost/subwoofer', 
+    function(err) {
+        if (err) {
+            console.error(chalk.red('Could not connect to MongoDB!'));
+            console.log(chalk.red(err));
+        }
+});
+>>>>>>> c7487ff2989135cbe02a5419ec87d07435c905ca
 
 function chunkVideo(name) {
     var command =
@@ -143,4 +157,47 @@ exports.home = function(req, res) {
     res.render('index', {
         testing: 'metro boomin'
     });
+};
+
+// If none of the fields on req.body are present, this route returns all the 
+// lyrics
+exports.find_lyrics = function(req, res) {
+    var youtube_id = req.body.youtube_id,
+        title = req.body.title,
+        artist = req.body.artist;
+    db.find(youtube_id, title, artist).then(function(songs) {
+        res.send(songs);
+    }, function(error) {
+        res.status(500).send(error);
+    });
+};
+
+exports.save_song = function(req, res) {
+    var youtube_id = req.body.youtube_id,
+        title = req.body.title,
+        artist = req.body.artist,
+        lyrics = req.body.lyrics;
+    db.insert_song(youtube_id, title, artist, lyrics).then(success, failure);
+
+    function success(response) {
+        res.send(response);
+    }
+
+    function failure(error) {
+        res.status(500).send(error);
+    }
+};
+
+exports.save_lyrics = function(req, res) {
+    var youtube_id = req.body.youtube_id,
+        lyrics = req.body.lyrics;
+    db.insert_lyrics(youtube_id, lyrics).then(success, failure);
+
+    function success(response) {
+        res.send(response);
+    }
+
+    function failure(error) {
+        res.status(500).send(error);
+    }
 };
