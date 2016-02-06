@@ -65,10 +65,10 @@ exports.downloadYouTubeVideo = function(req, res) {
         console.log(streams[0]);
 
         return getVideoMetaData(yt_id);
-        
+
     }).then(function(body) {
 
-        return tagVideo('1GWMvCXdsG4', 0);
+        tagVideo('1GWMvCXdsG4', 0);
 
         // I'm getting rich
         res.status(200).send();
