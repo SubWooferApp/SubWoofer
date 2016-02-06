@@ -7,6 +7,7 @@ var app = express();
 var swig = require('swig');
 
 app.use(express.static('videos'));
+app.use(express.static('public'));
 
 // Views
 app.engine('html', swig.renderFile);
