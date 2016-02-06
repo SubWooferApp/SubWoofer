@@ -3,7 +3,7 @@ var q = require('q');
 
 Clarifai.initAPI('BJCpT_mnhysKgy2n0cI6mhNZNqggpJpJmsqbwvBz', 'spcZJuQduHYjDN9BjyFTT2-I6TMSzKuFneW45xHT');
 
-Clarifai.setLogHttp(true);
+// Clarifai.setLogHttp(true);
 
 Clarifai.setThrottleHandler(function(bThrottled, waitSeconds) {
     console.log(bThrottled ? ["throttled. service available again in", waitSeconds, "seconds"].join(' ') : "not throttled");
