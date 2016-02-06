@@ -16,6 +16,19 @@ function makeThumb(name) {
     return exec(command);
 }
 
+function getVideoMetaData(id) {
+    var defer = q.defer();
+    var url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${YOUTUBE_API_KEY}`;
+    request(url, function(err, response, body) {
+        if (err)
+            defer.reject(err);
+        else
+            defer.resolve(body);
+    });
+
+    return defer.promise;
+}
+
 exports.downloadYouTubeVideo = function(req, res) {
     var yt_id = req.params.youtube_url;
     var youtube_url = 'https://www.youtube.com/watch?v=' + yt_id;
@@ -50,6 +63,11 @@ exports.downloadYouTubeVideo = function(req, res) {
 
     }).then(function(streams) {
         console.log(streams[0]);
+
+        return getVideoMetaData(yt_id);
+    }).then(function(body) {
+
+        console.log(body);
 
         // I'm getting rich
         res.status(200).send();
