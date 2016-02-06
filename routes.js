@@ -21,7 +21,7 @@ exports.downloadYouTubeVideo = function(req, res) {
     return exec(command).then(function(streams) {
         console.log(streams[0]);
         // Make the directory
-        var mkdir = 'mkdir -p ' + process.env.PWD + 'videos/' + yt_id;
+        var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
 
         return exec(mkdir);
 
