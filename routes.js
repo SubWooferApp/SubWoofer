@@ -99,7 +99,7 @@ function processSingleChunk(yt_id, chunk, body) {
                 adjectiveList: res.adjectives
             });
 
-            var lyric = sentencer.make("{{adjective }} {{ noun }}");
+            var lyric = Sentencer.make("{{adjective }} {{ noun }}");
 
             console.log(lyric);
             defer.resolve(lyric);
