@@ -1,4 +1,5 @@
-var exec = require('child_process').exec;
+var q = require('q');
+var exec = q.nfbind(require('child_process').exec);
 
 exports.chunkVideo = function(req, res) {
     var name = "darude_sandstorm";
@@ -20,13 +21,13 @@ exports.downloadYouTubeVideo = function(req, res) {
     console.log(yt_id);
 
     var command = 'youtube-dl --id -f "mp4" ' + youtube_url;
-    var child = exec(command, function(error, stdout, stderr) {
-        console.log('stdout: ' + stdout);
-
-        var child2 = exec('mkdir ' + process.env.PWD + yt_id, function(error, stdout, stderr) {
-            var ch3 = exec('mv ' + process.env.PWD + yt_id + '.mp4 ' + yt_id, function(error, stdout, stderr) {
-                console.log('stdout: ' + stdout);
-            });
-        });
+    exec(command).then(function(streams) {
+        console.log(streams[0]);
+        var mkdir = 'mkdir ' + process.env.PWD + yt_id;
+        return exec(mkdir);
+    }).then(function(streams) {
+        console.log(streams[0]);
+        var mv = 'mv ' + process.env.PWD + yt_id + '.mp4 ' + yt_id;
+        exec(mv);
     });
 };
