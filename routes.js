@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 function chunkVideo(name) {
     var command =
-            `ffmpeg -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
+            `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
