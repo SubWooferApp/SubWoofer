@@ -3,12 +3,15 @@ var q = require('q');
 
 Clarifai.initAPI(process.env.CLARIFAI_CLIENT_ID, process.env.CLARIFAI_CLIENT_SECRET);
 
+Clarifai.setLogHttp( true );
+
 Clarifai.setThrottleHandler(function(bThrottled, waitSeconds) {
     console.log(bThrottled ? ["throttled. service available again in", waitSeconds, "seconds"].join(' ') : "not throttled");
 });
 
 exports.tagVideo = function(yt_id, chunk) {
     var testImageURL = `http://subwoofer.mangohacks.com/${yt_id}/${yt_id}${chunk}.jpg`;
+    console.log(testImageURL);
     var defer = q.defer();
 
     Clarifai.tagURL(testImageURL, yt_id, (err, res) => {
