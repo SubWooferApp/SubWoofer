@@ -94,6 +94,7 @@ function processSingleChunk(yt_id, chunk, body) {
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
         var tags = res.results[0].result.tag.classes.join(' ');
         wordpos.getPOS(tags, function(res) {
+            try {
             Sentencer.configure({
                 nounList: res.nouns,
                 adjectiveList: res.adjectives
@@ -102,7 +103,10 @@ function processSingleChunk(yt_id, chunk, body) {
             var lyric = Sentencer.make("{{adjective }} {{ noun }}");
 
             console.log(lyric);
-            defer.resolve(lyric);
+                defer.resolve(lyric);
+            } catch(e) {
+                console.log(e);
+            }
         });
     }).catch(function(err) {
         defer.reject(err);
