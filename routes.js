@@ -59,6 +59,7 @@ function generateVideoLyrics(body, yt_id) {
 
     function failureHandler(err) {
         defer.reject(err);
+        console.log(err);
     }
 
     readNext();
