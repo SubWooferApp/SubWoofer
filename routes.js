@@ -21,14 +21,14 @@ exports.downloadYouTubeVideo = function(req, res) {
     return exec(command).then(function(streams) {
         console.log(streams[0]);
         // Make the directory
-        var mkdir = 'mkdir ' + process.env.PWD + '/' + yt_id;
+        var mkdir = 'mkdir -p ' + process.env.PWD + 'videos/' + yt_id;
 
         return exec(mkdir);
 
     }).then(function(streams) {
         console.log(streams[0]);
         // Move the video
-        var mv = 'mv ' + process.env.PWD + yt_id + '.mp4 ' + yt_id;
+        var mv = 'mv ' + process.env.PWD + '/' + yt_id + '.mp4 ' + 'videos/' + yt_id;
 
         return exec(mv);
 
