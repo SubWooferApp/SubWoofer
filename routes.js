@@ -7,11 +7,7 @@ function chunkVideo(name) {
     var command =
             `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
     console.log(command);
-    return exec(command).then(function(streams) {
-        console.log('ffmpeg_out:', streams[0]);
-    }).catch(function(err) {
-        console.log(err);
-    });
+    return exec(command);
 };
 
 // function makeThumb(name) {
