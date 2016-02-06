@@ -1,18 +1,27 @@
 var q = require('q');
 var exec = q.nfbind(require('child_process').exec);
+var tagVideo = require('./clarifai_tools');
 
 function chunkVideo(name) {
     var command =
-            `ffmpeg -y -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
+            `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
     console.log(command);
-    return exec(command);
+    return exec(command).then(function(streams) {
+        console.log('ffmpeg_out:', streams[0]);
+    }).catch(function(err) {
+        console.log(err);
+    });
 };
 
 function makeThumb(name) {
     var command =
-        `ffmpeg -y -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
+        `ffmpeg -ss 0.5 -i videos/${name}/${name}.mp4 -t 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
     console.log(command);
-    return exec(command);
+    return exec(command).then(function(streams) {
+        console.log('ffmpeg_out:', streams[0]);
+    }).catch(function(err) {
+        console.log(err);
+    });
 }
 
 exports.downloadYouTubeVideo = function(req, res) {
@@ -25,7 +34,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         console.log(streams[0]);
         // Make the directory
         var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
- 
+
         return exec(mkdir);
 
     }).then(function(streams) {
@@ -41,14 +50,18 @@ exports.downloadYouTubeVideo = function(req, res) {
         // Chunk that video!
         return chunkVideo(yt_id);
 
+
     }).then(function(streams) {
         console.log(streams[0]);
 
         // Get that image!
         return makeThumb(yt_id);
 
-    }).then(function(streams) {
+
+    }).then(function(streams){
         console.log(streams[0]);
+
+        return tagVideo('1GWMvCXdsG4', 0);
 
         // I'm getting rich
         res.status(200).send();
