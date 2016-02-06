@@ -67,6 +67,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         return getVideoMetaData(yt_id);
 
     }).then(function(body) {
+        console.log(body);
 
         tagVideo('1GWMvCXdsG4', 0);
 
@@ -74,7 +75,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         res.status(200).send();
 
     }).catch(function(err) {
-        console.log(err);
+        console.log(err.stack);
 
         // Bad stuff, give us an error
         res.status(401).send();
