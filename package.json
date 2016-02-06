@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SubwooferApp/Subwoofer/issues"
   },
-  "homepage": "https://github.com/SubwooferApp/Subwoofer#readme"
+  "homepage": "https://github.com/SubwooferApp/Subwoofer#readme",
+  "dependencies": {
+    "q": "^1.4.1"
+  }
 }
