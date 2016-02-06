@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 function chunkVideo(name) {
     var command =
-        `ffmpeg -i ivideos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.png`
+        `ffmpeg -i ivideos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`
         // `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
     console.log(command);
     return exec(command);
