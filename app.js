@@ -20,6 +20,8 @@ app.get('/', routes.home);
 
 app.get('/youtube/:youtube_url', routes.downloadYouTubeVideo);
 
-
+app.post('/songs/find', routes.find_lyrics);
+app.post('/songs/save', routes.save_song);
+app.post('/songs/lyrics/save', routes.save_lyrics);
 
 app.listen(80);
