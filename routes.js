@@ -46,8 +46,8 @@ function generateVideoLyrics(body, yt_id) {
     console.log('Files:', files);
     files = _.filter(files, file => { return file.endsWith(".jpg"); });
     console.log('Files:', files);
-    var chunks = files.length - 1;
-    var curChunk = 0;
+    var chunks = files.length;
+    var curChunk = 1;
 
     function readNext() {
         processSingleChunk(yt_id, curChunk, body)
