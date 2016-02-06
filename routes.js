@@ -94,8 +94,15 @@ function processSingleChunk(yt_id, chunk, body) {
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
         var tags = res.results[0].result.tag.classes.join(' ');
         wordpos.getPOS(tags, function(res) {
-            console.log(res);
-            defer.resolve(res);
+            Sentencer.configure({
+                nounList: res.nouns,
+                adjectiveList: res.adjectives
+            });
+
+            var lyric = sentencer.make("{{adjective }} {{ noun }}");
+
+            console.log(lyric);
+            defer.resolve(lyric);
         });
     }).catch(function(err) {
         defer.reject(err);
