@@ -4,6 +4,9 @@ var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
 var fs = require('fs');
 var _ = require('lodash');
+var Sentencer = require('sentencer');
+var WordPOS = require('wordpos'),
+    wordpos = new WordPOS();
 
 function chunkVideo(name) {
     var command =
@@ -78,8 +81,9 @@ function processSingleChunk(yt_id, chunk, body) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
-        console.log(res);
+        var tags = res.results[0].result.classes.join(' ');
         defer.resolve(res);
+        wordpos.getPOS(tags, console.log);
     }).catch(function(err) {
         defer.reject(err);
     });
