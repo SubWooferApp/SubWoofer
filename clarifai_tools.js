@@ -33,8 +33,7 @@ exports.tagVideo = function(yt_id, chunk) {
                 defer.reject(err);
             }
         } else {
-            if (typeof res["status_code"] === "string" &&
-                (res["status_code"] === "OK" || res["status_code"] === "PARTIAL_ERROR")) {
+            if (res["status_code"] === "OK" || res["status_code"] === "PARTIAL_ERROR") {
                 defer.resolve(res.results);
             }
         }
