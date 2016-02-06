@@ -2,10 +2,12 @@ var q = require('q');
 var exec = q.nfbind(require('child_process').exec);
 var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
+var fs = require('fs');
+var _ = require('lodash');
 
 function chunkVideo(name) {
     var command =
-            `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
+        `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
     console.log(command);
     return exec(command);
 };
@@ -30,9 +32,53 @@ function getVideoMetaData(id) {
     return defer.promise;
 }
 
+function generateVideoLyrics(body, yt_id) {
+    // clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
+    var defer = q.defer();
+    var files = fs.readdirSync('videos/' + yt_id);
+    files = _.filter(files, file => { file.endsWith(".mp4"); });
+    var chunks = files.length - 1;
+    var curChunk = 0;
+
+    function readNext() {
+        processSingleChunk(yt_id, curChunk, body)
+            .then(successHandler)
+            .catch(failureHandler);
+    }
+
+    function successHandler() {
+        curChunk += 1;
+        if (curChunk < chunks) {
+            readNext();
+        } else {
+            defer.resolve();
+        }
+    }
+
+    function failureHandler(err) {
+        defer.reject(err);
+    }
+
+    readNext();
+
+    return defer.promise;
+}
+
+function processSingleChunk(yt_id, chunk, body) {
+    var defer = q.defer();
+
+    clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
+        console.log(res.results.result);
+        defer.resolve(res);
+    });
+
+    return defer.promise;
+}
+
 exports.downloadYouTubeVideo = function(req, res) {
     var yt_id = req.params.youtube_url;
     var youtube_url = 'https://www.youtube.com/watch?v=' + yt_id;
+    var video_info;
     console.log(yt_id);
 
     var command = 'youtube-dl --id -f "mp4" ' + youtube_url;
@@ -60,14 +106,10 @@ exports.downloadYouTubeVideo = function(req, res) {
     }).then(function(streams) {
         console.log(streams[0]);
 
-        return q.all([
-            getVideoMetaData(yt_id),
-            clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
-        ]);
+        return getVideoMetaData(yt_id);
 
-    }).then(function(results) {
-        console.log(results[0]);
-        console.log(results[1]);
+    }).then(function(body) {
+        generateVideoLyrics(body, yt_id);
 
         // I'm getting rich
         res.status(200).send();
