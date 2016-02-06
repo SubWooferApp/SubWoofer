@@ -10,7 +10,7 @@ function chunkVideo(name) {
 
 function makeThumb(name) {
     var command =
-        `ffmpeg -ss 0.5 -i videos/${name}/${name}.mp4 -vf 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
+        `ffmpeg -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
     console.log(command);
     return exec(command);
 }
