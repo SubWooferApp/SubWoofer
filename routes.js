@@ -9,12 +9,12 @@ function chunkVideo(name) {
     return exec(command);
 };
 
-function makeThumb(name) {
-    var command =
-        `ffmpeg -y -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
-    console.log(command);
-    return exec(command);
-}
+// function makeThumb(name) {
+//     var command =
+//         `ffmpeg -y -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
+//     console.log(command);
+//     return exec(command);
+// }
 
 function getVideoMetaData(id) {
     var defer = q.defer();
@@ -54,12 +54,6 @@ exports.downloadYouTubeVideo = function(req, res) {
 
         // Chunk that video!
         return chunkVideo(yt_id);
-
-    }).then(function(streams) {
-        console.log(streams[0]);
-
-        // Get that image!
-        return makeThumb(yt_id);
 
     }).then(function(streams) {
         console.log(streams[0]);
