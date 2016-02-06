@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/SubwooferApp/Subwoofer#readme",
   "dependencies": {
+    "express": "^4.13.4",
     "q": "^1.4.1"
   }
 }

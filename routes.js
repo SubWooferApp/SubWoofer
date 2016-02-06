@@ -12,6 +12,17 @@ function chunkVideo(name) {
     });
 };
 
+function makeThumb(name) {
+    var command =
+        `ffmpeg -ss 0.5 -i videos/${name}/${name}.mp4 -t 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
+    console.log(command);
+    return exec(command).then(function(streams) {
+        console.log('ffmpeg_out:', streams[0]);
+    }).catch(function(err) {
+        console.log(err);
+    });
+}
+
 exports.downloadYouTubeVideo = function(req, res) {
     var yt_id = req.params.youtube_url;
     var youtube_url = 'https://www.youtube.com/watch?v=' + yt_id;
@@ -38,8 +49,16 @@ exports.downloadYouTubeVideo = function(req, res) {
         // Chunk that video!
         return chunkVideo(yt_id);
 
-        // All good buddy!
+
+    }).then(function(streams) {
+        console.log(streams[0]);
+
+        // Get that image!
+        return makeThumb(yt_id);
+
+        // I'm getting rich
         res.status(200).send();
+
 
     }).catch(function(err) {
         console.log(err);
