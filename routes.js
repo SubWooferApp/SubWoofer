@@ -1,5 +1,6 @@
 var q = require('q');
 var exec = q.nfbind(require('child_process').exec);
+var request = require('request');
 
 function chunkVideo(name) {
     var command =
