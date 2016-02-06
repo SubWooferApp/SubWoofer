@@ -111,7 +111,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         return getVideoMetaData(yt_id);
 
     }).then(function(body) {
-        console("GENERATE SOME LYRICS");
+        console.log("GENERATE SOME LYRICS");
         generateVideoLyrics(body, yt_id);
 
         // I'm getting rich
