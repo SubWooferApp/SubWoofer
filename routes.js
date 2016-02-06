@@ -1,6 +1,6 @@
 var q = require('q');
 var exec = q.nfbind(require('child_process').exec);
-var tagVideo = require('./clarifai_tools');
+var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
 
 function chunkVideo(name) {
@@ -65,7 +65,7 @@ exports.downloadYouTubeVideo = function(req, res) {
     }).then(function(body) {
         console.log(body);
 
-        tagVideo('1GWMvCXdsG4', 0);
+        clarafai_tools.tagVideo('1GWMvCXdsG4', 0);
 
         // I'm getting rich
         res.status(200).send();
