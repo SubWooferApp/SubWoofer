@@ -117,7 +117,7 @@ exports.downloadYouTubeVideo = function(req, res) {
         res.status(200).send();
 
     }).catch(function(err) {
-        console.log(err.stack);
+        console.log(err);
 
         // Bad stuff, give us an error
         res.status(401).send();
