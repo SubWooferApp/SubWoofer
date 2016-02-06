@@ -31,7 +31,13 @@ exports.downloadYouTubeVideo = function(req, res) {
         // Move the video
         var mv = 'mv ' + process.env.PWD + yt_id + '.mp4 ' + yt_id;
         return exec(mv);
+    }).then(function(streams) {
+        console.log(streams[0]);
+        // All good buddy!
+        res.status(200).send();
     }).catch(function(err) {
         console.log(err);
+        // Bad stuff, give us an error
+        res.status(401).send();
     });
 };
