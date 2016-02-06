@@ -34,7 +34,7 @@ exports.tagVideo = function(yt_id, chunk) {
             }
         } else {
             if (res["status_code"] === "OK" || res["status_code"] === "PARTIAL_ERROR") {
-                defer.resolve(res.results);
+                defer.resolve(res);
             }
         }
     });
