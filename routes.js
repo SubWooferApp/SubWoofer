@@ -21,13 +21,17 @@ exports.downloadYouTubeVideo = function(req, res) {
     console.log(yt_id);
 
     var command = 'youtube-dl --id -f "mp4" ' + youtube_url;
-    exec(command).then(function(streams) {
+    return exec(command).then(function(streams) {
         console.log(streams[0]);
-        var mkdir = 'mkdir ' + process.env.PWD + yt_id;
+        // Make the directory
+        var mkdir = 'mkdir ' + process.env.PWD + '/' + yt_id;
         return exec(mkdir);
     }).then(function(streams) {
         console.log(streams[0]);
+        // Move the video
         var mv = 'mv ' + process.env.PWD + yt_id + '.mp4 ' + yt_id;
-        exec(mv);
+        return exec(mv);
+    }).catch(function(err) {
+        console.log(err);
     });
 };
