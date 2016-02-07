@@ -14,7 +14,7 @@ var moment = require('moment');
 
 function chunkVideo(name) {
     var command =
-        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=5/60 videos/${name}/${name}%d.jpg`;
+        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=20/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
