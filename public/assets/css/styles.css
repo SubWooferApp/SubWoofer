@@ -277,6 +277,20 @@ pre code {
     max-width: 240px;
     widows: 100%;
 }
+.logo.spining {
+    -webkit-animation-name: spin;
+   -webkit-animation-duration: 40000ms;
+   -webkit-animation-iteration-count: infinite;
+   -webkit-animation-timing-function: linear;
+   -moz-animation-name: spin;
+   -moz-animation-duration: 40000ms;
+   -moz-animation-iteration-count: infinite;
+   -moz-animation-timing-function: linear;
+   -ms-animation-name: spin;
+   -ms-animation-duration: 40000ms;
+   -ms-animation-iteration-count: infinite;
+   -ms-animation-timing-function: linear;
+}
 
 .grid {
     display: flex;
@@ -704,3 +718,17 @@ pre code {
 /* Small devices (tablets, 768px and up) */
 /* Medium devices (desktops, 992px and up) */
 /* Large devices (large desktops, 1200px and up) */
+
+
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(36000deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(36000deg); }
+}
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(36000deg);}
+}

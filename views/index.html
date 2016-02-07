@@ -10,7 +10,7 @@
 <!-- ******PROMO****** -->
 <section id="promo" class="promo section offset-header">
     <div class="container text-center">
-        <img class="logo" src="assets/images/logo.png" alt="">
+        <img class="logo" v-bind:class="{'spining': loading}" src="assets/images/logo.png" alt="">
         <h2 class="title">Sub<span class="highlight">Woofer</span></h2>
         <p class="intro">Metro Boomin got some more lyrics</p>
         <div class="btns">
@@ -54,7 +54,9 @@
         <button type="submit" class="btn btn-cta-secondary" target="_blank">Do it</button>
     </form>
     <div class="video_wrap" v-if="video_src">
-        <video controls="true" src="<+ video_src +>"></video>
+        <video controls="true" src="<+ video_src +>">
+            <track src="http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.srt" kind="subtitle" srclang="en-US" label="English" />
+        </video>
     </div>
 </template>
 
