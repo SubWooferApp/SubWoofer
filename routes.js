@@ -10,18 +10,19 @@ var WordPOS = require('wordpos'),
 var db = require('./db');
 var mongoose = require('mongoose');
 var chalk = require('chalk');
+var templates = require('./templates');
 
-var db_connection = mongoose.connect('mongodb://localhost/subwoofer', 
+var db_connection = mongoose.connect('mongodb://localhost/subwoofer',
     function(err) {
         if (err) {
             console.error(chalk.red('Could not connect to MongoDB!'));
             console.log(chalk.red(err));
         }
-});
+    });
 
 function chunkVideo(name) {
     var command =
-            `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
+        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
@@ -58,7 +59,9 @@ function generateVideoLyrics(body, yt_id) {
     var defer = q.defer();
     var files = fs.readdirSync('videos/' + yt_id);
     console.log('Files:', files);
-    files = _.filter(files, file => { return file.endsWith(".jpg"); });
+    files = _.filter(files, file => {
+        return file.endsWith(".jpg");
+    });
     console.log('Files:', files);
     var chunks = files.length;
     var curChunk = 1;
@@ -95,16 +98,16 @@ function processSingleChunk(yt_id, chunk, body) {
         var tags = res.results[0].result.tag.classes.join(' ');
         wordpos.getPOS(tags, function(res) {
             try {
-            Sentencer.configure({
-                nounList: res.nouns,
-                adjectiveList: res.adjectives
-            });
+                Sentencer.configure({
+                    nounList: res.nouns,
+                    adjectiveList: res.adjectives
+                });
 
-            var lyric = Sentencer.make("{{adjective }} {{ noun }}");
+                var lyric = Sentencer.make(templates[Math.floor(Math.random() * templates.length)]);
 
-            console.log(lyric);
+                console.log(lyric);
                 defer.resolve(lyric);
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
         });
