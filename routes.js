@@ -71,6 +71,8 @@ function generateVideoLyrics(body, yt_id) {
             console.log(srtString);
 
             // UPDATE MONGO BABY
+            console.log( JSON.parse(body).items[0].snippet.thumbnails);
+
             var video = new Video({
                 youtube_id: yt_id,
                 title: JSON.parse(body).items[0].snippet.title,
