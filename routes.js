@@ -68,6 +68,7 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
+            console.log('Body:', body);
             // UPDATE MONGO BABY
             var video = new Video({
                 youtube_id: yt_id,
