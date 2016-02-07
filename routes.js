@@ -73,22 +73,22 @@ function generateVideoLyrics(body, yt_id) {
 
             lyrics.forEach(function(lyric, index) {
                 srtString += `${index + 1}\n`;
-                srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')},000-->00:${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
+                srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')}.000 --> 00:${moment(0).seconds((index + 1) * 10).format('mm:ss')}.000\n`;
                 srtString += `${lyric}\n`;
                 if (lyrics.length != index + 1)
                     srtString += "\n";
             });
 
-            fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString, 'utf8');
+            // fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString, 'utf8');
 
-            var vttString = ("WEBVTT \n\n" + srtString);
+            var vttString = ("WEBVTT - Has some cues \n\n" + srtString);
 
             fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, vttString, 'utf8');
 
             console.log(srtString);
 
-            var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.srt videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf "ass=videos/${yt_id}/${yt_id}.ass" videos/${yt_id}/${yt_id}f.mp4`;
-            exec(command).then(function(streams) {
+            // var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.srt videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf "ass=videos/${yt_id}/${yt_id}.ass" videos/${yt_id}/${yt_id}f.mp4`;
+            // exec(command).then(function(streams) {
 
                 // UPDATE MONGO BABY
                 var video = new Video({
@@ -104,9 +104,9 @@ function generateVideoLyrics(body, yt_id) {
                     console.log(video);
                     defer.resolve(video);
                 });
-            }).catch(function(err) {
-                defer.reject(err);
-            });
+            // }).catch(function(err) {
+            //     defer.reject(err);
+            // });
         }
     }
 
