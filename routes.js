@@ -81,7 +81,7 @@ function generateVideoLyrics(body, yt_id) {
 
             fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString, 'utf8');
 
-            srtString += "WEBVTT\n\n" + srtString;
+            srtString += ("WEBVTT\n\n" + srtString);
 
             fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, srtString, 'utf8');
 
