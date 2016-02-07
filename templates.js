@@ -59,5 +59,6 @@ module.exports = [
     "He was {{ a_noun }}, she was {{ a_noun }}, can I make it any more {{ adjective }}?",
     "And I know she'll be the {{ noun }} of {{ noun }}, at least we'll both be {{ adjective }}",
     "I can't feel my {{ noun }} when I'm with {{ noun }}",
-    "I think I found myself {{ a_noun }}, she's always {{ adjective }} when I need {{ noun }}"
+    "I think I found myself {{ a_noun }}, she's always {{ adjective }} when I need {{ noun }}",
+    "Give it to me, I'm {{ adjective }}"
 ];
