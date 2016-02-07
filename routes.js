@@ -186,7 +186,6 @@ exports.downloadYouTubeVideo = function(req, res) {
 
             });
         }
-
     });
 };
 
@@ -199,7 +198,8 @@ exports.home = function(req, res) {
 exports.getVideos = function(req, res) {
     Video.find({}, {
         youtube_id: true,
-        title: true
+        title: true,
+        thumb: true
     }).exec(function(err, videos) {
         res.jsonp(videos);
     });
