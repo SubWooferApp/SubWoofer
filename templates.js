@@ -14,10 +14,10 @@ module.exports = [
     "Fake {{ noun }} lie to a real {{ noun }}, that's just some {{ noun }} that you don't do",
     "If {{ adjective }} Metro don't trust {{ noun }} I'ma shoot ya",
     "Jumpman jumpman jumpman them {{ nouns }} up to something",
-    "Cause I got a really {{ adjective }} {{ noun }}, we need some really {{ adjective }} {{ nouns }}"
+    "Cause I got a really {{ adjective }} {{ noun }}, we need some really {{ adjective }} {{ nouns }}",
     "I'm drinkin' {{ noun }}, it help me sleep",
     "{{ noun }} used to call me on my cell phone, late night when you need my {{ adjective }}",
-    "Ever since {{ noun }} left the city you got {{ a_noun }} for yourself now"
+    "Ever since {{ noun }} left the city you got {{ a_noun }} for yourself now",
     "I was born with some {{ adjective }} hair, drinkin' breast milk out {{ a_noun }}",
     "I'm sprayin' at these {{ adjective }} {{ nouns }} like WD-40",
     "My President is {{ adjective }}, my Maybach too",
