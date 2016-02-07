@@ -101,9 +101,11 @@ var YTInput = Vue.extend({
     events: {
         'yt-vid-click': function(yt_id) {
             console.log(yt_id);
-
-            var v = document.getElementById("video_player_el")
-            var t = document.getElementById("subt")
+            
+            
+            this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
+            var v = this.$els.videoElement;
+            var t = this.$els.subt;
 
             var textTracks = v.textTracks; // one for each track element
             var textTrack = textTracks[0]; // corresponds to the first track element
@@ -114,7 +116,7 @@ var YTInput = Vue.extend({
             }
 
 
-            this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
+            
             t.src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
     }
