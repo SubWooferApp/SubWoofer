@@ -30,7 +30,7 @@
             <template v-for="video in videos">
                 <a href="#" @click="onVideoClick(video.youtube_id, $event)" class="dub-vid">
                     <div class="img-wrap">
-                        <img src="http://unsplash.it/640/480" alt="">
+                        <img src="<+ video.thumb +>" alt="">
                     </div>
                     <div class="info-wrap">
                         <div class="title">
@@ -56,7 +56,7 @@
     <div class="video_wrap" v-if="video_src">
         <video controls="true" src="<+ video_src +>">
             <track
-            src="http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.vtt"
+            src="<+ srt_src +>"
             kind="subtitle" srclang="en-US" label="English" default/>
         </video>
     </div>

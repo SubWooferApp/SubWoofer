@@ -77,8 +77,15 @@ var YTInput = Vue.extend({
                     id: self.youtube_id
                 }
             }).done(function(data){
-                self.video_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.mp4';
-                self.srt_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.vtt';
+                console.log(data);
+
+                self.video_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.mp4';
+                self.srt_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
+                self.$dispatch('video-added', {
+                    youtube_id: data.youtube_id,
+                    title: data.title,
+                    thumb: data.thumb
+                });
                 self.loading = false;
                 self.$dispatch('loading-done');
             });
@@ -112,15 +119,14 @@ new Vue({
         }
     },
     ready: function() {
+        var self = this;
+
         $.ajax({
             url: 'http://subwoofer.mangohacks.com/videos',
             method: 'GET'
         }).done(function(data){
             console.log(data);
-            console.log("loaded");
-            // self.video_src = 'http://subwoofer.mangohacks.com/uxpDa-c-4Mc/uxpDa-c-4Mc.mp4';
-            // self.loading = false;
-            // self.$dispatch('loading-done');
+            self.videos = data;
         });
     },
     events: {
@@ -129,6 +135,9 @@ new Vue({
         },
         'loading-done': function() {
             this.loading = false;
+        },
+        'video-added': function(video_obj) {
+            this.videos.push(video_obj);
         }
     }
 });
