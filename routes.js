@@ -184,7 +184,7 @@ exports.home = function(req, res) {
 };
 
 exports.getVideos = function(req, res) {
-    Video.find({}).exec(function(err, videos) {
+    Video.find({}, { $unset: { lyrics: "" }}).exec(function(err, videos) {
         res.jsonp(videos);
     });
 };
