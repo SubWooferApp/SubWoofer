@@ -82,7 +82,7 @@ function generateVideoLyrics(body, yt_id) {
 
             console.log(srtString);
 
-            exec(`ffmpeg subtitles=videos/${yt_id}/${yt_id}.srt subtitles=videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf ass=videos/${yt_id}/${yt_id}.ass videos/${yt_id}/${yt_id}.mp4`).then(function(streams) {
+            exec(`ffmpeg -y -i videos/${yt_id}/${yt_id}.srt subtitles=videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf ass=videos/${yt_id}/${yt_id}.ass videos/${yt_id}/${yt_id}.mp4`).then(function(streams) {
 
                 // UPDATE MONGO BABY
                 var video = new Video({
