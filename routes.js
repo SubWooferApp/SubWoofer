@@ -14,24 +14,11 @@ var moment = require('moment');
 
 function chunkVideo(name) {
     var command =
-        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
+        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=5/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
 
-// function chunkVideo(name) {
-//     var command =
-//         `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
-//     console.log(command);
-//     return exec(command);
-// };
-
-// function makeThumb(name) {
-//     var command =
-//         `ffmpeg -y -ss 0.5 -i videos/${name}/${name}.mp4 -vframes 1 -s 500x500 -f image2 videos/${name}/${name}.jpg`;
-//     console.log(command);
-//     return exec(command);
-// }
 
 function getVideoMetaData(id) {
     var defer = q.defer();
@@ -69,44 +56,34 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
-            var srtString = "";
+            var srtString = "WEBVTT - Has some cues \n\n";
 
             lyrics.forEach(function(lyric, index) {
                 srtString += `${index + 1}\n`;
-                srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')}.000 --> 00:${moment(0).seconds((index + 1) * 10).format('mm:ss')}.000\n`;
+                srtString += `00:${moment(0).seconds(index  * 5).format('mm:ss')}.000 --> 00:${moment(0).seconds((index + 1) * 5).format('mm:ss')}.000\n`;
                 srtString += `${lyric}\n`;
                 if (lyrics.length != index + 1)
                     srtString += "\n";
             });
 
-            // fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString, 'utf8');
-
-            var vttString = ("WEBVTT - Has some cues \n\n" + srtString);
-
-            fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, vttString, 'utf8');
+            fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, srtString, 'utf8');
 
             console.log(srtString);
 
-            // var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.srt videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf "ass=videos/${yt_id}/${yt_id}.ass" videos/${yt_id}/${yt_id}f.mp4`;
-            // exec(command).then(function(streams) {
+            // UPDATE MONGO BABY
+            var video = new Video({
+                youtube_id: yt_id,
+                title: JSON.parse(body).items[0].snippet.title,
+                thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
+                lyrics: lyrics
+            });
 
-                // UPDATE MONGO BABY
-                var video = new Video({
-                    youtube_id: yt_id,
-                    title: JSON.parse(body).items[0].snippet.title,
-                    thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
-                    lyrics: lyrics
-                });
-
-                video.save(function(err, video) {
-                    if (err)
-                        defer.reject(err);
-                    console.log(video);
-                    defer.resolve(video);
-                });
-            // }).catch(function(err) {
-            //     defer.reject(err);
-            // });
+            video.save(function(err, video) {
+                if (err)
+                    defer.reject(err);
+                console.log(video);
+                defer.resolve(video);
+            });
         }
     }
 
