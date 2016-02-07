@@ -51,7 +51,9 @@ var YTInput = Vue.extend({
     data: function () {
       return {
           youtube_url: null,
-          video_src: null
+          video_src: null,
+          loading: false,
+          srt_src: null
       }
     },
     computed: {
@@ -63,7 +65,10 @@ var YTInput = Vue.extend({
         onSubmit: function(event) {
             var self = this;
             event.preventDefault();
+
             console.log(self.youtube_id);
+            self.loading = true;
+            self.$dispatch('loading-start');
 
             $.ajax({
                 url: '/vid',
@@ -72,7 +77,10 @@ var YTInput = Vue.extend({
                     id: self.youtube_id
                 }
             }).done(function(data){
-                self.video_src = 'http://subwoofer.mangohacks.com/uxpDa-c-4Mc/uxpDa-c-4Mc.mp4';
+                self.video_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.mp4';
+                self.srt_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.srt';
+                self.loading = false;
+                self.$dispatch('loading-done');
             });
         }
     },
@@ -80,6 +88,7 @@ var YTInput = Vue.extend({
         'yt-vid-click': function(yt_id) {
             console.log(yt_id);
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
+            this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.srt';
         }
     }
 });
@@ -89,7 +98,8 @@ new Vue({
     el: '#app',
     data: function() {
         return {
-            videos: videos
+            videos: videos,
+            loading: false
         }
     },
     components: {
@@ -99,6 +109,26 @@ new Vue({
         onVideoClick: function(yt_id, e) {
             e.preventDefault();
             this.$broadcast('yt-vid-click', yt_id);
+        }
+    },
+    ready: function() {
+        $.ajax({
+            url: 'http://subwoofer.mangohacks.com/videos',
+            method: 'GET'
+        }).done(function(data){
+            console.log(data);
+            console.log("loaded");
+            // self.video_src = 'http://subwoofer.mangohacks.com/uxpDa-c-4Mc/uxpDa-c-4Mc.mp4';
+            // self.loading = false;
+            // self.$dispatch('loading-done');
+        });
+    },
+    events: {
+        'loading-start': function() {
+            this.loading = true;
+        },
+        'loading-done': function() {
+            this.loading = false;
         }
     }
 });
