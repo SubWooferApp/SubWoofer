@@ -73,26 +73,35 @@ function generateVideoLyrics(body, yt_id) {
 
             lyrics.forEach(function(lyric, index) {
                 srtString += `${index + 1}\n`;
-                srtString += `${moment(0).seconds(index  * 10).format('mm:ss')},000 --> ${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
+                srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')},000-->00:${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
                 srtString += `${lyric}\n`;
-                srtString += "\n";
+                if (lyrics.length != index + 1)
+                    srtString += "\n";
             });
+
+            fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString, 'utf8');
 
             console.log(srtString);
 
-            console.log('Body:', body);
-            // UPDATE MONGO BABY
-            var video = new Video({
-                youtube_id: yt_id,
-                title: JSON.parse(body).items[0].snippet.title,
-                lyrics: lyrics
-            });
+            var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.srt videos/${yt_id}/${yt_id}.ass && ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf "ass=videos/${yt_id}/${yt_id}.ass" videos/${yt_id}/${yt_id}f.mp4`;
+            exec(command).then(function(streams) {
 
-            video.save(function(err, video) {
-                if (err)
-                    defer.reject(err);
-                console.log(video);
-                defer.resolve(video);
+                // UPDATE MONGO BABY
+                var video = new Video({
+                    youtube_id: yt_id,
+                    title: JSON.parse(body).items[0].snippet.title,
+                    thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
+                    lyrics: lyrics
+                });
+
+                video.save(function(err, video) {
+                    if (err)
+                        defer.reject(err);
+                    console.log(video);
+                    defer.resolve(video);
+                });
+            }).catch(function(err) {
+                defer.reject(err);
             });
         }
     }
@@ -196,7 +205,10 @@ exports.home = function(req, res) {
 };
 
 exports.getVideos = function(req, res) {
-    Video.find({}, { youtube_id: true, title: true}).exec(function(err, videos) {
+    Video.find({}, {
+        youtube_id: true,
+        title: true
+    }).exec(function(err, videos) {
         res.jsonp(videos);
     });
 };
