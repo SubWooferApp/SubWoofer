@@ -72,11 +72,13 @@ function generateVideoLyrics(body, yt_id) {
             var srtString = "";
 
             lyrics.forEach(function(lyric, index) {
+                srtString += "\n";
                 srtString += `${index + 1}\n`;
                 srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')},000-->00:${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
                 srtString += `${lyric}\n`;
-                srtString += "\n";
             });
+
+            srtString += "\n";
 
             fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString);
 
