@@ -165,13 +165,14 @@ exports.downloadYouTubeVideo = function(req, res) {
         console.log(video);
 
         // I'm getting rich
-        res.status(200).send();
+        res.status(200);
+        res.json(video);
 
     }).catch(function(err) {
         console.log(err);
 
         // Bad stuff, give us an error
-        res.status(401).send();
+        res.status(400).send();
 
     });
 };
@@ -179,6 +180,12 @@ exports.downloadYouTubeVideo = function(req, res) {
 exports.home = function(req, res) {
     res.render('index', {
         testing: 'metro boomin'
+    });
+};
+
+exports.getVideos = function(req, res) {
+    Video.find({}).exec(function(err, videos) {
+        res.jsonp(videos);
     });
 };
 
