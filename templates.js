@@ -14,10 +14,10 @@ module.exports = [
     "{{ adjective }} {{ noun }} lie to {{ an_adjective }} {{ noun }}, that's just some {{ noun }} that {{ noun }} don't do",
     "If {{ adjective }} Metro don't trust {{ noun }} I'ma shoot ya",
     "Jumpman jumpman jumpman them {{ nouns }} up to something",
-    "Cause I got a really {{ adjective }} {{ noun }}, {{ noun }} need some really {{ adjective }} {{ nouns }}"
+    "Cause I got a really {{ adjective }} {{ noun }}, {{ noun }} need some really {{ adjective }} {{ nouns }}",
     "I'm drinkin' {{ noun }}, it help me sleep",
     "{{ noun }} used to call me on my {{ noun }}, late night when {{ noun }} need my {{ noun }}",
-    "Ever since {{ noun }} left the {{ noun }} you got {{ a_noun }} for yourself now"
+    "Ever since {{ noun }} left the {{ noun }} you got {{ a_noun }} for yourself now",
     "{{ noun }} was born with some {{ adjective }} {{ noun }}, drinkin' {{ noun }} out {{ a_noun }}",
     "I'm sprayin' at these {{ adjective }} {{ nouns }} like {{ noun }}",
     "My President is {{ adjective }}, my {{ noun }} too",
