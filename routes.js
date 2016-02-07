@@ -82,21 +82,26 @@ function generateVideoLyrics(body, yt_id) {
 
             console.log(srtString);
 
-            console.log('Body:', body);
-            // UPDATE MONGO BABY
-            var video = new Video({
-                youtube_id: yt_id,
-                title: JSON.parse(body).items[0].snippet.title,
-                thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
-                lyrics: lyrics
+            exec(`ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -vf subtitles=videos/${yt_id}/${yt_id}.srt videos/${yt_id}/${yt_id}.mp4`).then(function(streams) {
+
+                // UPDATE MONGO BABY
+                var video = new Video({
+                    youtube_id: yt_id,
+                    title: JSON.parse(body).items[0].snippet.title,
+                    thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
+                    lyrics: lyrics
+                });
+
+                video.save(function(err, video) {
+                    if (err)
+                        defer.reject(err);
+                    console.log(video);
+                    defer.resolve(video);
+                });
+            }).catch(function(err) {
+                defer.reject(err);
             });
 
-            video.save(function(err, video) {
-                if (err)
-                    defer.reject(err);
-                console.log(video);
-                defer.resolve(video);
-            });
         }
     }
 
@@ -199,7 +204,10 @@ exports.home = function(req, res) {
 };
 
 exports.getVideos = function(req, res) {
-    Video.find({}, { youtube_id: true, title: true}).exec(function(err, videos) {
+    Video.find({}, {
+        youtube_id: true,
+        title: true
+    }).exec(function(err, videos) {
         res.jsonp(videos);
     });
 };
