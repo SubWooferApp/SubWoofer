@@ -74,20 +74,9 @@ var YTInput = Vue.extend({
                 url: '/youtube/'+self.youtube_id
             }).done(function(data){
                 console.log(data);
-
-                var v = document.getElementById("video_player_el")
-                var t = document.getElementById("subt")
-
-                var textTracks = v.textTracks; // one for each track element
-                var textTrack = textTracks[0]; // corresponds to the first track element
-
-                var cues = textTrack.cues;
-                for (var i=cues.length;i>=0;i--) {
-                    textTrack.removeCue(cues[i]);
-                }
-
+                
                 self.video_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.mp4';
-                t.src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
+                self.srt_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
                 self.$dispatch('video-added', {
                     youtube_id: data.youtube_id,
                     title: data.title,
@@ -101,26 +90,8 @@ var YTInput = Vue.extend({
     events: {
         'yt-vid-click': function(yt_id) {
             console.log(yt_id);
-
-
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
-
-            console.log(this.$els);
-            var v = document.getElementById('video_player_el');
-            var t = document.getElementById('subt');
-
-            var textTracks = v.textTracks; // one for each track element
-            var textTrack = textTracks[0]; // corresponds to the first track element
-
-            var cues = textTrack.cues;
-            for (var i=cues.length;i>=0;i--) {
-                textTrack.removeCue(cues[i]);
-            }
-
-
-
-            t.src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
     }
 });
