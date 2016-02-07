@@ -53,7 +53,7 @@
 
         <button type="submit" class="btn btn-cta-secondary" target="_blank">Do it</button>
     </form>
-    <div class="video_wrap" v-if="video_src">
+    <div class="video_wrap" v-bind:class="{'active': video_src}">
         <video v-el:video-element id="video_player_el" controls="true" src="<+ video_src +>">
             <track v-el:subt id="subt"
                 src="<+ srt_src +>"

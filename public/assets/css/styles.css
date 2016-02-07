@@ -635,6 +635,14 @@ pre code {
 
 .video_wrap {
     padding: 30px 0;
+    visibility: hidden;
+    height: 0;
+    transform: scale(.01);
+}
+.video_wrap.active {
+    visibility: visible;;
+    height: auto;
+    transform: scale(1);
 }
 
 .video_wrap  video{
