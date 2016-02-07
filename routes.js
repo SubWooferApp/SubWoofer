@@ -4,11 +4,17 @@ var clarafai_tools = require('./clarifai_tools');
 var request = require('request');
 var fs = require('fs');
 var _ = require('lodash');
+var Sentencer = require('sentencer');
+var WordPOS = require('wordpos'),
+    wordpos = new WordPOS();
+// var db = require('./db');
+var templates = require('./templates');
+var Video = require('./models/video');
+var moment = require('moment');
 
 function chunkVideo(name) {
     var command =
-        `ffmpeg -i ivideos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`
-        // `ffmpeg -i videos/${name}/${name}.mp4 -acodec copy -f segment -segment_time 10 -vcodec copy -reset_timestamps 1 -map 0 -an videos/${name}/${name}%d.mp4`;
+        `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=10/60 videos/${name}/${name}%d.jpg`;
     console.log(command);
     return exec(command);
 };
@@ -44,14 +50,16 @@ function generateVideoLyrics(body, yt_id) {
     // clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
     var defer = q.defer();
     var files = fs.readdirSync('videos/' + yt_id);
-    console.log('Files:', files);
-    files = _.filter(files, file => { return file.endsWith(".mp4"); });
-    console.log('Files:', files);
-    var chunks = files.length - 1;
-    var curChunk = 0;
+    files = _.filter(files, file => {
+        return file.endsWith(".jpg");
+    });
+    console.log(body);
+    var chunks = files.length;
+    var curChunk = 1;
+    var lyrics = [];
 
     function readNext() {
-        processSingleChunk(yt_id, curChunk, body)
+        processSingleChunk(yt_id, curChunk, lyrics)
             .then(successHandler)
             .catch(failureHandler);
     }
@@ -61,7 +69,31 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
-            defer.resolve();
+            var srtString = "";
+
+            lyrics.forEach(function(lyric, index) {
+                srtString += `${index + 1}\n`;
+                srtString += `${moment(0).seconds(index  * 10).format('mm:ss')},000 --> ${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
+                srtString += `${lyric}\n`;
+                srtString += "\n";
+            });
+
+            console.log(srtString);
+
+            console.log('Body:', body);
+            // UPDATE MONGO BABY
+            var video = new Video({
+                youtube_id: yt_id,
+                title: JSON.parse(body).items[0].snippet.title,
+                lyrics: lyrics
+            });
+
+            video.save(function(err, video) {
+                if (err)
+                    defer.reject(err);
+                console.log(video);
+                defer.resolve(video);
+            });
         }
     }
 
@@ -75,12 +107,32 @@ function generateVideoLyrics(body, yt_id) {
     return defer.promise;
 }
 
-function processSingleChunk(yt_id, chunk, body) {
+function processSingleChunk(yt_id, chunk, lyrics) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
-        console.log(res.results[0].result.tag.classes[0]);
-        defer.resolve(res.results[0].result.tag.classes[0]);
+        var tags = res.results[0].result.tag.classes.join(' ');
+        wordpos.getPOS(tags, function(res) {
+            try {
+                Sentencer.configure({
+                    nounList: res.nouns,
+                    adjectiveList: res.adjectives
+                });
+
+                var lyric = Sentencer.make(templates[
+                    Math.floor(Math.random() * templates.length)
+                ]);
+
+                lyrics.push(lyric);
+
+                console.log(lyric);
+                defer.resolve(lyric);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }).catch(function(err) {
+        defer.reject(err);
     });
 
     return defer.promise;
@@ -119,17 +171,20 @@ exports.downloadYouTubeVideo = function(req, res) {
         return getVideoMetaData(yt_id);
 
     }).then(function(body) {
-        console.log("GENERATE SOME LYRICS");
-        generateVideoLyrics(body, yt_id);
+        return generateVideoLyrics(body, yt_id);
+
+    }).then(function(video) {
+        console.log(video);
 
         // I'm getting rich
-        res.status(200).send();
+        res.status(200);
+        res.json(video);
 
     }).catch(function(err) {
         console.log(err);
 
         // Bad stuff, give us an error
-        res.status(401).send();
+        res.status(400).send();
 
     });
 };
@@ -139,3 +194,52 @@ exports.home = function(req, res) {
         testing: 'metro boomin'
     });
 };
+
+exports.getVideos = function(req, res) {
+    Video.find({}, { youtube_id: true, title: true}).exec(function(err, videos) {
+        res.jsonp(videos);
+    });
+};
+
+// If none of the fields on req.body are present, this route returns all the
+// lyrics
+// exports.find_lyrics = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         title = req.body.title,
+//         artist = req.body.artist;
+//     db.find(youtube_id, title, artist).then(function(songs) {
+//         res.send(songs);
+//     }, function(error) {
+//         res.status(500).send(error);
+//     });
+// };
+
+// exports.save_song = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         title = req.body.title,
+//         artist = req.body.artist,
+//         lyrics = req.body.lyrics;
+//     db.insert_song(youtube_id, title, artist, lyrics).then(success, failure);
+
+//     function success(response) {
+//         res.send(response);
+//     }
+
+//     function failure(error) {
+//         res.status(500).send(error);
+//     }
+// };
+
+// exports.save_lyrics = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         lyrics = req.body.lyrics;
+//     db.insert_lyrics(youtube_id, lyrics).then(success, failure);
+
+//     function success(response) {
+//         res.send(response);
+//     }
+
+//     function failure(error) {
+//         res.status(500).send(error);
+//     }
+// };

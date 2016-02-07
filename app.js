@@ -6,6 +6,9 @@ var routes = require('./routes');
 var app = express();
 var swig = require('swig');
 
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL);
+
 app.use(express.static('videos'));
 app.use(express.static('public'));
 
@@ -23,6 +26,10 @@ app.post('/vid', function(req, res) {
 });
 app.get('/youtube/:youtube_url', routes.downloadYouTubeVideo);
 
+app.get('/videos', routes.getVideos);
 
+// app.post('/songs/find', routes.find_lyrics);
+// app.post('/songs/save', routes.save_song);
+// app.post('/songs/lyrics/save', routes.save_lyrics);
 
 app.listen(80);

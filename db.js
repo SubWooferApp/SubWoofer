@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
-  models = require('./models/song');
-var Song = mongoose.model('Song');
+  models = require('./models/video');
+var Video = mongoose.model('Video');
 
 /**
  * Empty strings are not passed to Mongo. Also it works fine if any of 
