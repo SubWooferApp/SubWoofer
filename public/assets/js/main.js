@@ -106,6 +106,7 @@ var YTInput = Vue.extend({
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
 
+            console.log(this.$els);
             var v = document.getElementById('video_player_el');
             var t = document.getElementById('subt');
 
