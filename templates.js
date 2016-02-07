@@ -7,4 +7,24 @@ module.exports = [
     "It's {{ adjective }} at the {{ noun }}",
     "So don't you open up that {{ noun }}",
     "Don't you let out that {{ adjective }} {{ noun }}",
+    "You getting {{ adjective }}, I'm getting {{ adjective }}",
+    "They say that I'm {{ adjective }}, I used to talk to {{ a_noun }}",
+    "What's {{ a_noun }} to {{ a_noun }}? What's {{ a_noun }} to a nonbeliever?",
+    "Got my {{ nouns }} in Paris, and they going gorillas",
+    "Fake {{ noun }} lie to a real {{ noun }}, that's just some {{ noun }} that you don't do",
+    "If {{ adjective }} Metro don't trust {{ noun }} I'ma shoot ya",
+    "Jumpman jumpman jumpman them {{ nouns }} up to something",
+    "Cause I got a really {{ adjective }} {{ noun }}, we need some really {{ adjective }} {{ nouns }}"
+    "I'm drinkin' {{ noun }}, it help me sleep",
+    "{{ noun }} used to call me on my cell phone, late night when you need my {{ adjective }}",
+    "Ever since {{ noun }} left the city you got {{ a_noun }} for yourself now"
+    "I was born with some {{ adjective }} hair, drinkin' breast milk out {{ a_noun }}",
+    "I'm sprayin' at these {{ adjective }} {{ nouns }} like WD-40",
+    "My President is {{ adjective }}, my Maybach too",
+    "Live through the strugglin', life's {{ an_adjective} hustle",
+    "{{ noun }} caught {{ a_noun }} about a week ago",
+    "I got {{ nouns }} askin' me about the code for the {{ noun }}",
+    "{{ adjective }} English, 800 capsules of {{ noun }}",
+    "Did a lot of {{ noun }} just to live this here lifestyle",
+    "Started from the {{ noun }}, now we here"
 ];
