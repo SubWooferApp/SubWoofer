@@ -7,7 +7,7 @@ var _ = require('lodash');
 var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
-var db = require('./db');
+// var db = require('./db');
 var templates = require('./templates');
 var Video = require('./models/video');
 
@@ -182,43 +182,43 @@ exports.home = function(req, res) {
 
 // If none of the fields on req.body are present, this route returns all the
 // lyrics
-exports.find_lyrics = function(req, res) {
-    var youtube_id = req.body.youtube_id,
-        title = req.body.title,
-        artist = req.body.artist;
-    db.find(youtube_id, title, artist).then(function(songs) {
-        res.send(songs);
-    }, function(error) {
-        res.status(500).send(error);
-    });
-};
+// exports.find_lyrics = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         title = req.body.title,
+//         artist = req.body.artist;
+//     db.find(youtube_id, title, artist).then(function(songs) {
+//         res.send(songs);
+//     }, function(error) {
+//         res.status(500).send(error);
+//     });
+// };
 
-exports.save_song = function(req, res) {
-    var youtube_id = req.body.youtube_id,
-        title = req.body.title,
-        artist = req.body.artist,
-        lyrics = req.body.lyrics;
-    db.insert_song(youtube_id, title, artist, lyrics).then(success, failure);
+// exports.save_song = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         title = req.body.title,
+//         artist = req.body.artist,
+//         lyrics = req.body.lyrics;
+//     db.insert_song(youtube_id, title, artist, lyrics).then(success, failure);
 
-    function success(response) {
-        res.send(response);
-    }
+//     function success(response) {
+//         res.send(response);
+//     }
 
-    function failure(error) {
-        res.status(500).send(error);
-    }
-};
+//     function failure(error) {
+//         res.status(500).send(error);
+//     }
+// };
 
-exports.save_lyrics = function(req, res) {
-    var youtube_id = req.body.youtube_id,
-        lyrics = req.body.lyrics;
-    db.insert_lyrics(youtube_id, lyrics).then(success, failure);
+// exports.save_lyrics = function(req, res) {
+//     var youtube_id = req.body.youtube_id,
+//         lyrics = req.body.lyrics;
+//     db.insert_lyrics(youtube_id, lyrics).then(success, failure);
 
-    function success(response) {
-        res.send(response);
-    }
+//     function success(response) {
+//         res.send(response);
+//     }
 
-    function failure(error) {
-        res.status(500).send(error);
-    }
-};
+//     function failure(error) {
+//         res.status(500).send(error);
+//     }
+// };
