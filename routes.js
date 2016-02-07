@@ -49,11 +49,10 @@ function generateVideoLyrics(body, yt_id) {
     // clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
     var defer = q.defer();
     var files = fs.readdirSync('videos/' + yt_id);
-    console.log('Files:', files);
     files = _.filter(files, file => {
         return file.endsWith(".jpg");
     });
-    console.log('Files:', files);
+    console.log(body);
     var chunks = files.length;
     var curChunk = 1;
     var lyrics = [];
