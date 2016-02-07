@@ -101,7 +101,6 @@ function generateVideoLyrics(body, yt_id) {
             }).catch(function(err) {
                 defer.reject(err);
             });
-
         }
     }
 
