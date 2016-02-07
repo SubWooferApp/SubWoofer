@@ -133,47 +133,59 @@ exports.downloadYouTubeVideo = function(req, res) {
     var video_info;
     console.log(yt_id);
 
-    var command = 'youtube-dl --id -f "mp4" ' + youtube_url;
-    return exec(command).then(function(streams) {
-        console.log(streams[0]);
-        // Make the directory
-        var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
+    Video.findOne({
+        youtube_id: yt_id
+    }, function(err, video) {
+        if (err)
+            res.status(400).send();
+        else if (video) {
+            res.status(304);
+            res.json(video);
+        } else {
+            var command = 'youtube-dl --id -f "mp4" ' + youtube_url;
+            return exec(command).then(function(streams) {
+                console.log(streams[0]);
+                // Make the directory
+                var mkdir = 'mkdir -p ' + process.env.PWD + '/videos/' + yt_id;
 
-        return exec(mkdir);
+                return exec(mkdir);
 
-    }).then(function(streams) {
-        console.log(streams[0]);
-        // Move the video
-        var mv = 'mv ' + process.env.PWD + '/' + yt_id + '.mp4 ' + 'videos/' + yt_id;
+            }).then(function(streams) {
+                console.log(streams[0]);
+                // Move the video
+                var mv = 'mv ' + process.env.PWD + '/' + yt_id + '.mp4 ' + 'videos/' + yt_id;
 
-        return exec(mv);
+                return exec(mv);
 
-    }).then(function(streams) {
-        console.log(streams[0]);
+            }).then(function(streams) {
+                console.log(streams[0]);
 
-        // Chunk that video!
-        return chunkVideo(yt_id);
+                // Chunk that video!
+                return chunkVideo(yt_id);
 
-    }).then(function(streams) {
-        console.log(streams[0]);
+            }).then(function(streams) {
+                console.log(streams[0]);
 
-        return getVideoMetaData(yt_id);
+                return getVideoMetaData(yt_id);
 
-    }).then(function(body) {
-        return generateVideoLyrics(body, yt_id);
+            }).then(function(body) {
+                return generateVideoLyrics(body, yt_id);
 
-    }).then(function(video) {
-        console.log(video);
+            }).then(function(video) {
+                console.log(video);
 
-        // I'm getting rich
-        res.status(200);
-        res.json(video);
+                // I'm getting rich
+                res.status(200);
+                res.json(video);
 
-    }).catch(function(err) {
-        console.log(err);
+            }).catch(function(err) {
+                console.log(err);
 
-        // Bad stuff, give us an error
-        res.status(400).send();
+                // Bad stuff, give us an error
+                res.status(400).send();
+
+            });
+        }
 
     });
 };
