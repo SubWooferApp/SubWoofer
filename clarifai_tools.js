@@ -11,7 +11,6 @@ Clarifai.setThrottleHandler(function(bThrottled, waitSeconds) {
 
 exports.tagVideo = function(yt_id, chunk) {
     var testImageURL = `http://subwoofer.mangohacks.com/${yt_id}/${yt_id}${chunk}.jpg`;
-    console.log(testImageURL);
     var defer = q.defer();
 
     Clarifai.tagURL(testImageURL, yt_id, (err, res) => {
