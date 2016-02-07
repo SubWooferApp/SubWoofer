@@ -73,7 +73,7 @@ function generateVideoLyrics(body, yt_id) {
 
             lyrics.forEach(function(lyric, index) {
                 srtString += `${index + 1}\n`;
-                srtString += `${moment(0).seconds(index  * 10).format('mm:ss')},000 --> ${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
+                srtString += `${moment(0).seconds(index  * 10).format('hh:mm:ss')},000 --> ${moment(0).seconds((index + 1) * 10).format('hh:mm:ss')},000\n`;
                 srtString += `${lyric}\n`;
                 srtString += "\n";
             });
