@@ -101,9 +101,10 @@ var YTInput = Vue.extend({
     events: {
         'yt-vid-click': function(yt_id) {
             console.log(yt_id);
-            
-            
+
+
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
+            this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
             var v = this.$els.videoElement;
             var t = this.$els.subt;
 
@@ -116,7 +117,7 @@ var YTInput = Vue.extend({
             }
 
 
-            
+
             t.src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
     }
