@@ -78,6 +78,8 @@ function generateVideoLyrics(body, yt_id) {
                 srtString += "\n";
             });
 
+            fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`);
+
             console.log(srtString);
 
             console.log('Body:', body);
@@ -85,6 +87,7 @@ function generateVideoLyrics(body, yt_id) {
             var video = new Video({
                 youtube_id: yt_id,
                 title: JSON.parse(body).items[0].snippet.title,
+                thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
                 lyrics: lyrics
             });
 
