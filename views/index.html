@@ -55,7 +55,9 @@
     </form>
     <div class="video_wrap" v-if="video_src">
         <video controls="true" src="<+ video_src +>">
-            <track src="http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.vtt" kind="subtitle" srclang="en-US" label="English" />
+            <track
+            src="http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.vtt"
+            kind="subtitle" srclang="en-US" label="English" default/>
         </video>
     </div>
 </template>
