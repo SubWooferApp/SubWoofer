@@ -21,6 +21,9 @@ swig.setDefaults({ cache: false });
 
 app.get('/', routes.home);
 
+app.post('/vid', function(req, res) {
+    res.status(200).send();
+});
 app.get('/youtube/:youtube_url', routes.downloadYouTubeVideo);
 
 app.get('/videos', routes.getVideos);

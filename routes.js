@@ -10,6 +10,7 @@ var WordPOS = require('wordpos'),
 // var db = require('./db');
 var templates = require('./templates');
 var Video = require('./models/video');
+var moment = require('moment');
 
 function chunkVideo(name) {
     var command =
@@ -68,6 +69,17 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
+            var srtString = "";
+
+            lyrics.forEach(function(lyric, index) {
+                srtString += `${index + 1}\n`;
+                srtString += `${moment(0).seconds(index  * 10).format('mm:ss')},000 --> ${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
+                srtString += `${lyric}\n`;
+                srtString += "\n";
+            });
+
+            console.log(srtString);
+
             console.log('Body:', body);
             // UPDATE MONGO BABY
             var video = new Video({

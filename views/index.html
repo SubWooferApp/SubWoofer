@@ -4,9 +4,58 @@
 
 {% block head %}
   {% parent %}
-  <link rel="stylesheet" href="custom.css">
 {% endblock %}
 
 {% block content %}
-    <p>This is just an awesome page.</p>
+<!-- ******PROMO****** -->
+<section id="promo" class="promo section offset-header">
+    <div class="container text-center">
+        <img class="logo" src="assets/images/logo.png" alt="">
+        <h2 class="title">Sub<span class="highlight">Woofer</span></h2>
+        <p class="intro">Metro Boomin got some more lyrics</p>
+        <div class="btns">
+            <yt-input></yt-input>
+        </div>
+        <ul class="meta list-inline">
+            <li>&nbsp;</li>
+        </ul><!--//meta-->
+    </div><!--//container-->
+</section><!--//promo-->
+
+<!-- ******ABOUT****** -->
+<section id="about" class="about section">
+    <div class="container">
+        <h2 class="title text-center">Latest Dubs</h2>
+        <div class="grid">
+            <template v-for="video in videos">
+                <a href="#" @click="onVideoClick(video.youtube_id, $event)" class="dub-vid">
+                    <div class="img-wrap">
+                        <img src="http://unsplash.it/640/480" alt="">
+                    </div>
+                    <div class="info-wrap">
+                        <div class="title">
+                            <+ video.title +>
+                        </div>
+                    </div>
+                </a>
+            </template>
+        </div>
+    </div><!--//container-->
+</section><!--//about-->
+
+
+<template id="yt_form_template">
+    <form class="yt_form" @submit="onSubmit" >
+        <div class="form-group">
+            <!-- <label for="youtube_url">Youtube Link</label> -->
+            <input type="text" v-model="youtube_url" name="youtube_url" class="form-control" id="youtube_url" placeholder="Youtube Link">
+        </div>
+
+        <button type="submit" class="btn btn-cta-secondary" target="_blank">Do it</button>
+    </form>
+    <div class="video_wrap" v-if="video_src">
+        <video controls="true" src="<+ video_src +>"></video>
+    </div>
+</template>
+
 {% endblock %}

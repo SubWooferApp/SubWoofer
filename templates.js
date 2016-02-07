@@ -21,7 +21,7 @@ module.exports = [
     "{{ noun }} was born with some {{ adjective }} {{ noun }}, drinkin' {{ noun }} out {{ a_noun }}",
     "I'm sprayin' at these {{ adjective }} {{ nouns }} like {{ noun }}",
     "My President is {{ adjective }}, my {{ noun }} too",
-    "Live through the {{ noun }}, life's {{ an_adjective} hustle",
+    "Live through the {{ noun }}, life's {{ an_adjective }} hustle",
     "{{ noun }} caught {{ a_noun }} about a week ago",
     "I got {{ nouns }} askin' me about the {{ noun }} for the {{ noun }}",
     "{{ adjective }} English, 800 {{ nouns }} of {{ noun }}",
