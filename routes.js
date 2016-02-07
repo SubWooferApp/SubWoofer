@@ -72,38 +72,37 @@ function generateVideoLyrics(body, yt_id) {
             var srtString = "";
 
             lyrics.forEach(function(lyric, index) {
-                srtString += "\n";
                 srtString += `${index + 1}\n`;
                 srtString += `00:${moment(0).seconds(index  * 10).format('mm:ss')},000-->00:${moment(0).seconds((index + 1) * 10).format('mm:ss')},000\n`;
                 srtString += `${lyric}\n`;
+                if (lyrics.length != index + 1)
+                    srtString += "\n";
             });
-
-            srtString += "\n";
 
             fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString);
 
             console.log(srtString);
 
-            var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -f srt -i videos/${yt_id}/${yt_id}.srt -c:v copy -c:a copy -c:s mov_text videos/${yt_id}/${yt_id}f.mp4`;
-            exec(command).then(function(streams) {
+            // var command = `ffmpeg -y -i videos/${yt_id}/${yt_id}.mp4 -f srt -i videos/${yt_id}/${yt_id}.srt -c:v copy -c:a copy -c:s mov_text videos/${yt_id}/${yt_id}f.mp4`;
+            // exec(command).then(function(streams) {
 
-                // UPDATE MONGO BABY
-                var video = new Video({
-                    youtube_id: yt_id,
-                    title: JSON.parse(body).items[0].snippet.title,
-                    thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
-                    lyrics: lyrics
-                });
-
-                video.save(function(err, video) {
-                    if (err)
-                        defer.reject(err);
-                    console.log(video);
-                    defer.resolve(video);
-                });
-            }).catch(function(err) {
-                defer.reject(err);
+            // UPDATE MONGO BABY
+            var video = new Video({
+                youtube_id: yt_id,
+                title: JSON.parse(body).items[0].snippet.title,
+                thumb: JSON.parse(body).items[0].snippet.thumbnails.standard,
+                lyrics: lyrics
             });
+
+            video.save(function(err, video) {
+                if (err)
+                    defer.reject(err);
+                console.log(video);
+                defer.resolve(video);
+            });
+            // }).catch(function(err) {
+            //     defer.reject(err);
+            // });
         }
     }
 
