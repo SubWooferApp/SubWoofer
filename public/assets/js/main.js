@@ -78,7 +78,7 @@ var YTInput = Vue.extend({
                 }
             }).done(function(data){
                 self.video_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.mp4';
-                self.srt_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.srt';
+                self.srt_src = 'http://subwoofer.mangohacks.com/LDZX4ooRsWs/LDZX4ooRsWs.vtt';
                 self.loading = false;
                 self.$dispatch('loading-done');
             });
@@ -88,7 +88,7 @@ var YTInput = Vue.extend({
         'yt-vid-click': function(yt_id) {
             console.log(yt_id);
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
-            this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.srt';
+            this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
     }
 });
