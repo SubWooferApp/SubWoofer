@@ -8,17 +8,8 @@ var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
 var db = require('./db');
-var mongoose = require('mongoose');
-var chalk = require('chalk');
 var templates = require('./templates');
-
-var db_connection = mongoose.connect('mongodb://localhost/subwoofer',
-    function(err) {
-        if (err) {
-            console.error(chalk.red('Could not connect to MongoDB!'));
-            console.log(chalk.red(err));
-        }
-    });
+var Video = require('./models/video');
 
 function chunkVideo(name) {
     var command =
@@ -65,9 +56,10 @@ function generateVideoLyrics(body, yt_id) {
     console.log('Files:', files);
     var chunks = files.length;
     var curChunk = 1;
+    var lyrics = [];
 
     function readNext() {
-        processSingleChunk(yt_id, curChunk, body)
+        processSingleChunk(yt_id, curChunk, lyrics)
             .then(successHandler)
             .catch(failureHandler);
     }
@@ -77,7 +69,19 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
-            defer.resolve();
+            // UPDATE MONGO BABY
+            var video = new Video({
+                youtube_id: yt_id,
+                title: body.title,
+                lyrics: lyrics
+            });
+
+            video.save(function(err, video) {
+                if (err)
+                    defer.reject(err);
+                console.log(video);
+                defer.resolve(video);
+            });
         }
     }
 
@@ -91,7 +95,7 @@ function generateVideoLyrics(body, yt_id) {
     return defer.promise;
 }
 
-function processSingleChunk(yt_id, chunk, body) {
+function processSingleChunk(yt_id, chunk, lyrics) {
     var defer = q.defer();
 
     clarafai_tools.tagVideo(yt_id, chunk).then(function(res) {
@@ -103,7 +107,11 @@ function processSingleChunk(yt_id, chunk, body) {
                     adjectiveList: res.adjectives
                 });
 
-                var lyric = Sentencer.make(templates[Math.floor(Math.random() * templates.length)]);
+                var lyric = Sentencer.make(templates[
+                    Math.floor(Math.random() * templates.length)
+                ]);
+
+                lyrics.push(lyric);
 
                 console.log(lyric);
                 defer.resolve(lyric);
@@ -172,7 +180,7 @@ exports.home = function(req, res) {
     });
 };
 
-// If none of the fields on req.body are present, this route returns all the 
+// If none of the fields on req.body are present, this route returns all the
 // lyrics
 exports.find_lyrics = function(req, res) {
     var youtube_id = req.body.youtube_id,

@@ -6,6 +6,9 @@ var routes = require('./routes');
 var app = express();
 var swig = require('swig');
 
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL);
+
 app.use(express.static('videos'));
 app.use(express.static('public'));
 
