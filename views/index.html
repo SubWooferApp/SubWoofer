@@ -54,7 +54,7 @@
         <button type="submit" class="btn btn-cta-secondary" target="_blank">Do it</button>
     </form>
     <div class="video_wrap" v-if="video_src">
-        <video controls="true" src="<+ video_src +>">
+        <video id="video_player_el" controls="true" src="<+ video_src +>">
             <track
             src="<+ srt_src +>"
             kind="subtitle" srclang="en-US" label="English" default/>

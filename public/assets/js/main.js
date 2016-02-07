@@ -74,7 +74,8 @@ var YTInput = Vue.extend({
                 url: '/youtube/'+self.youtube_id
             }).done(function(data){
                 console.log(data);
-
+                var video_el = document.getElementById('video_player_el');
+                console.log(video_el);
                 self.video_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.mp4';
                 self.srt_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
                 self.$dispatch('video-added', {
