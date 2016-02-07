@@ -71,11 +71,7 @@ var YTInput = Vue.extend({
             self.$dispatch('loading-start');
 
             $.ajax({
-                url: '/vid',
-                method: 'POST',
-                data: {
-                    id: self.youtube_id
-                }
+                url: '/youtube/'+self.youtube_id
             }).done(function(data){
                 console.log(data);
 
