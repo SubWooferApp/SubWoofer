@@ -78,7 +78,7 @@ function generateVideoLyrics(body, yt_id) {
                 srtString += "\n";
             });
 
-            fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`);
+            fs.writeFileSync(`videos/${yt_id}/${yt_id}.srt`, srtString);
 
             console.log(srtString);
 
