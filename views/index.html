@@ -55,7 +55,11 @@
     </form>
     <div class="video_wrap" v-if="video_src">
         <video v-el:video-element id="video_player_el" controls="true" src="<+ video_src +>">
-            <html-track src="<+ srt_src +>"></html-track>
+            <track v-el:subt id="subt"
+                src="<+ srt_src +>"
+                kind="subtitle"
+                srclang="en-US"
+                label="English" default/>
         </video>
     </div>
 </template>
