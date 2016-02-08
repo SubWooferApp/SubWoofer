@@ -302,8 +302,9 @@ pre code {
     position: relative;
     overflow: hidden;
     flex: 0 1 25%;
+    padding: 4px;
 }
-.dub-vid .img-wrap {position: relative; overflow: hidden;}
+.dub-vid .img-wrap {position: relative; overflow: hidden; padding: 10px}
 .dub-vid .img-wrap:after {
     content: '';
     padding-top: 100%;

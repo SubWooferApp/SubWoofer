@@ -69,7 +69,9 @@ var YTInput = Vue.extend({
             console.log(self.youtube_id);
             self.loading = true;
             self.$dispatch('loading-start');
-
+            var audio = new Audio('assets/bark.mp3');
+            audio.loop = true;
+            audio.play();
             $.ajax({
                 url: '/youtube/'+self.youtube_id
             }).done(function(data){
@@ -82,6 +84,8 @@ var YTInput = Vue.extend({
                     title: data.title,
                     thumb: data.thumb
                 });
+                audio.loop = false;
+                audio.pause();
                 self.loading = false;
                 self.$dispatch('loading-done');
             });
@@ -89,7 +93,6 @@ var YTInput = Vue.extend({
     },
     events: {
         'yt-vid-click': function(yt_id) {
-            console.log(yt_id);
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
