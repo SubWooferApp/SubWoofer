@@ -127,7 +127,7 @@ function processSingleChunk(yt_id, chunk, lyrics) {
                 console.log(lyric);
                 defer.resolve(lyric);
             } catch (e) {
-                console.log(e);
+                console.log('WordPos Error:', e);
             }
         });
     }).catch(function(err) {
