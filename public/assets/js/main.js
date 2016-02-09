@@ -76,7 +76,9 @@ var YTInput = Vue.extend({
                 url: '/youtube/'+self.youtube_id
             }).done(function(data){
                 console.log(data);
-                $('#subt')[0].src = "";
+                if($('#subt').length > 0){
+                   $('#subt')[0].src = "";
+                }
                 self.video_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.mp4';
                 self.srt_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
                 self.$dispatch('video-added', {
@@ -93,7 +95,9 @@ var YTInput = Vue.extend({
     },
     events: {
         'yt-vid-click': function(yt_id) {
-            $('#subt')[0].src = "";
+            if($('#subt').length > 0){
+              $('#subt')[0].src = "";
+            }
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
