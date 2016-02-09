@@ -7,7 +7,6 @@ var _ = require('lodash');
 var Sentencer = require('sentencer');
 var WordPOS = require('wordpos'),
     wordpos = new WordPOS();
-// var db = require('./db');
 var templates = require('./templates');
 var Video = require('./models/video');
 var moment = require('moment');
@@ -15,7 +14,6 @@ var moment = require('moment');
 function chunkVideo(name) {
     var command =
         `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=20/60 videos/${name}/${name}%d.jpg`;
-    console.log(command);
     return exec(command);
 };
 
@@ -34,13 +32,13 @@ function getVideoMetaData(id) {
 }
 
 function generateVideoLyrics(body, yt_id) {
-    // clarafai_tools.tagVideo('1GWMvCXdsG4', 0)
     var defer = q.defer();
     var files = fs.readdirSync('videos/' + yt_id);
+
     files = _.filter(files, file => {
         return file.endsWith(".jpg");
     });
-    console.log(body);
+
     var chunks = files.length;
     var curChunk = 1;
     var lyrics = [];
@@ -56,24 +54,33 @@ function generateVideoLyrics(body, yt_id) {
         if (curChunk < chunks) {
             readNext();
         } else {
-            var srtString = "WEBVTT - Has some cues \n\n";
+            var vttString = "WEBVTT - Has some cues \n\n";
 
+            // Build the vtt file
             lyrics.forEach(function(lyric, index) {
-                srtString += `${index + 1}\n`;
-                srtString += `00:${moment(0).seconds(index  * 5).format('mm:ss')}.000 --> 00:${moment(0).seconds((index + 1) * 5).format('mm:ss')}.000\n`;
-                srtString += `${lyric}\n`;
+                vttString += `${index + 1}\n`;
+                vttString += `00:${moment(0).seconds(index  * 5).format('mm:ss')}.000 --> 00:${moment(0).seconds((index + 1) * 5).format('mm:ss')}.000\n`;
+                vttString += `${lyric}\n`;
                 if (lyrics.length != index + 1)
-                    srtString += "\n";
+                    vttString += "\n";
             });
 
-            fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, srtString, 'utf8');
+            fs.writeFileSync(`videos/${yt_id}/${yt_id}.vtt`, vttString, 'utf8');
 
-            console.log(srtString);
+            console.log(vttString);
+
+            var parsedBody = JSON.parse(body);
+
+            // Get highest available thumbnail.
+            var thumbnail = parsedBody.items[0].snippet.thumbnails.standard ||
+                parsedBody.items[0].snippet.thumbnails.high ||
+                parsedBody.items[0].snippet.thumbnails.medium ||
+                parsedBody.items[0].snippet.thumbnails.default;
 
             var video = new Video({
                 youtube_id: yt_id,
-                title: JSON.parse(body).items[0].snippet.title,
-                thumb: JSON.parse(body).items[0].snippet.thumbnails.standard.url,
+                title: parsedBody.items[0].snippet.title,
+                thumb: thumbnail.url,
                 lyrics: lyrics
             });
 
@@ -108,9 +115,12 @@ function processSingleChunk(yt_id, chunk, lyrics) {
                     adjectiveList: res.adjectives
                 });
 
-                var lyric = Sentencer.make(templates[
-                    Math.floor(Math.random() * templates.length)
-                ]);
+                // Throw away badly generated lyrics
+                do {
+                    var lyric = Sentencer.make(templates[
+                        Math.floor(Math.random() * templates.length)
+                    ]);
+                } while (_.includes(lyric, '{{'));
 
                 lyrics.push(lyric);
 
@@ -182,8 +192,8 @@ exports.downloadYouTubeVideo = function(req, res) {
                 console.log(err);
 
                 // Bad stuff, give us an error
-                res.status(400).send();
-
+                res.status(400);
+                res.json(err);
             });
         }
     });
@@ -204,46 +214,3 @@ exports.getVideos = function(req, res) {
         res.jsonp(videos);
     });
 };
-
-// If none of the fields on req.body are present, this route returns all the
-// lyrics
-// exports.find_lyrics = function(req, res) {
-//     var youtube_id = req.body.youtube_id,
-//         title = req.body.title,
-//         artist = req.body.artist;
-//     db.find(youtube_id, title, artist).then(function(songs) {
-//         res.send(songs);
-//     }, function(error) {
-//         res.status(500).send(error);
-//     });
-// };
-
-// exports.save_song = function(req, res) {
-//     var youtube_id = req.body.youtube_id,
-//         title = req.body.title,
-//         artist = req.body.artist,
-//         lyrics = req.body.lyrics;
-//     db.insert_song(youtube_id, title, artist, lyrics).then(success, failure);
-
-//     function success(response) {
-//         res.send(response);
-//     }
-
-//     function failure(error) {
-//         res.status(500).send(error);
-//     }
-// };
-
-// exports.save_lyrics = function(req, res) {
-//     var youtube_id = req.body.youtube_id,
-//         lyrics = req.body.lyrics;
-//     db.insert_lyrics(youtube_id, lyrics).then(success, failure);
-
-//     function success(response) {
-//         res.send(response);
-//     }
-
-//     function failure(error) {
-//         res.status(500).send(error);
-//     }
-// };
