@@ -93,6 +93,7 @@ var YTInput = Vue.extend({
     },
     events: {
         'yt-vid-click': function(yt_id) {
+            $('#subt')[0].src = "";
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
         }
