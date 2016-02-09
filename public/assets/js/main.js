@@ -51,6 +51,7 @@ var YTInput = Vue.extend({
     data: function () {
       return {
           youtube_url: null,
+          current_id: null,
           video_src: null,
           loading: false,
           srt_src: null
@@ -67,6 +68,7 @@ var YTInput = Vue.extend({
             event.preventDefault();
 
             console.log(self.youtube_id);
+            self.current_id = self.youtube_id;
             self.loading = true;
             self.$dispatch('loading-start');
             var audio = new Audio('assets/bark.mp3');
@@ -81,6 +83,7 @@ var YTInput = Vue.extend({
                 }
                 self.video_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.mp4';
                 self.srt_src = 'http://subwoofer.mangohacks.com/'+data.youtube_id+'/'+data.youtube_id+'.vtt';
+                self.current_id = data.youtube_id;
                 self.$dispatch('video-added', {
                     youtube_id: data.youtube_id,
                     title: data.title,
@@ -95,11 +98,12 @@ var YTInput = Vue.extend({
     },
     events: {
         'yt-vid-click': function(yt_id) {
-            if($('#subt').length > 0){
+            if($('#subt').length > 0 && this.current_id != yt_id){
               $('#subt')[0].src = "";
             }
             this.video_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.mp4';
             this.srt_src = 'http://subwoofer.mangohacks.com/'+yt_id+'/'+yt_id+'.vtt';
+            this.current_id = yt_id;
         }
     }
 });
