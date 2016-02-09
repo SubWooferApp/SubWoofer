@@ -3,7 +3,7 @@
 {% block title %}My Page{% endblock %}
 
 {% block head %}
-  {% parent %}
+{% parent %}
 {% endblock %}
 
 {% block content %}
@@ -54,16 +54,15 @@
         <button type="submit" class="btn btn-cta-secondary" target="_blank">Do it</button>
     </form>
     <div class="video_wrap" v-bind:class="{'active': video_src}">
-              <video v-el:video-element id="video_player_el" controls="true"
-                src="<+ video_src +>">
-                            <track v-el:subt id="subt"
-                                            src="<+ srt_src +>"
-                                                            kind="subtitle"
-                                                                            srclang="en-US"
-                                                                                            label="English"
-                                                                                            default/>
-                                                                                                    </video>
-                                                                                              </div>
+        <video v-el:video-element id="video_player_el" controls="true src="<+ video_src +>">
+        <track v-el:subt id="subt"
+            src="<+ srt_src +>"
+            kind="subtitle"
+            srclang="en-US"
+            label="English"
+            default/>
+        </video>
+    </div>
 </template>
 
 {% endblock %}
