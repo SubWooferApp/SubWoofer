@@ -11,6 +11,10 @@ var templates = require('./templates');
 var Video = require('./models/video');
 var moment = require('moment');
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function chunkVideo(name) {
     var command =
         `ffmpeg -y -i videos/${name}/${name}.mp4 -vf fps=20/60 videos/${name}/${name}%d.jpg`;
@@ -122,12 +126,15 @@ function processSingleChunk(yt_id, chunk, lyrics) {
                     ]);
                 } while (_.includes(lyric, '{{'));
 
+                // Ensure capitalization
+                lyric = capitalizeFirstLetter(lyric);
+
                 lyrics.push(lyric);
 
                 console.log(lyric);
                 defer.resolve(lyric);
             } catch (e) {
-                console.log('WordPos Error:', e);
+                console.log(e);
             }
         });
     }).catch(function(err) {
